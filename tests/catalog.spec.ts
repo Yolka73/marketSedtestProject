@@ -27,6 +27,9 @@ test.describe('Каталог', () => {
     test('Клик по товару открывает карточку', async ({ catalog, page }) => {
         await catalog.openFirstProductCard();
         await expect(page).toHaveURL(/\/item\//);
+        // Проверка, что кнопка "Позвонить" видна
+        const callButton = page.getByRole('button', { name: 'Позвонить' });
+        await expect(callButton).toBeVisible();
     });
 
     test('Сортировка "По новизне работает некорректно"', async ({ catalog }) => {
@@ -82,14 +85,14 @@ test.describe('Каталог', () => {
             timeout: 5000,
             message: 'Ожидание увеличения количества карточек',
         }).toBeGreaterThan(initialCount);
-        //const newCount = await catalog.getAllProductCards().count();
-        // expect(newCount).toBeGreaterThan(initialCount);
+     
     });
 });
 
-test('Клик по категории открывает нужный каталог', async ({ catalog }) => {
+test('Клик по категории открывает нужный каталог', async ({ catalog, page }) => {
 
     await catalog.clickCategory('Техника');
+    await expect(page).toHaveURL('http://market.sedtest-tools.ru/category/1');
 
     const categoryTitleLocator = await catalog.currentCategoryTitle();
     await expect(categoryTitleLocator).toContainText('Техника'); // <-- Исправлено

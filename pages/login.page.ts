@@ -14,8 +14,6 @@ export class LoginPage {
     const loginBtn = this.page.locator('button:has-text("Войти")').nth(1);
     await expect(loginBtn).toBeVisible();
     await loginBtn.click();
-    //await this.page.waitForTimeout(5000);
-
     await this.page.waitForURL(/\/account$/, { timeout: 10000 });
     await expect(this.page.locator('.UserAdvertList_right__kg90g')).toBeVisible();
 
@@ -29,6 +27,7 @@ export class LoginPage {
     if (successExpected) {
       await this.page.waitForURL(/\/account$/, { timeout: 10000 });
       await expect(this.page).toHaveURL(/\/account$/);
+      await expect(this.page.locator('#root')).toContainText('Мои объявления');
     } else {
       await expect(this.page.locator('.MuiAlert-message')).toContainText(errorText);
     }

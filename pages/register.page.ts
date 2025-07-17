@@ -6,7 +6,7 @@ export class RegisterPage {
   async goto() {
     await this.page.goto('http://market.sedtest-tools.ru/login');
     await expect(this.page.locator('text=Еще не зарегистрированы ?')).toBeVisible();
-    await this.page.goto('http://market.sedtest-tools.ru/login');
+    //await this.page.goto('http://market.sedtest-tools.ru/login');
     await this.page.getByText('Еще не зарегистрированы ?').click();
     await expect(this.page.getByText('Регистрация')).toBeVisible();
   }

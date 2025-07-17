@@ -5,7 +5,6 @@ export class CatalogPage {
 
     async goto() {
         await this.page.goto('http://market.sedtest-tools.ru/category/1');
-        //await expect(this.page).toHaveURL(/\/login$/);
     }
 
     async waitForCatalogLoaded(): Promise<void> {
