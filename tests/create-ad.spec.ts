@@ -20,6 +20,7 @@ test.describe('Подача объявления', () => {
       await page.goto('http://market.sedtest-tools.ru/');
       await expect(page.getByRole('button', { name: 'Подать объявление' })).toBeVisible();
       await page.getByRole('button', { name: 'Подать объявление' }).click();
+     
       await expect(page).toHaveURL(/\/item\/add$/);
       await expect(page.locator('#root')).toContainText('Подача объявления');
     });

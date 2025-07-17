@@ -40,18 +40,16 @@ test.describe('Авторизация', () => {
   });
 
   test('Авторизация с валидными данными', async ({ loginPage }) => {
-    await loginPage.login(existingUser.email, existingUser.password);
-    await expect(loginPage.page).toHaveURL(/\/account$/);
+    await loginPage.loginWithValidation(existingUser.email, existingUser.password, true);
   });
 
   test('Авторизация с невалидным логином', async ({ loginPage }) => {
-    await loginPage.login('wrong@example.com', existingUser.password);
-    await loginPage.expectAlertVisibleWithText('Неправильный логин или пароль');
+    await loginPage.loginWithValidation('wrong@example.com', existingUser.password, false);
   });
 
   test('Авторизация с невалидным паролем', async ({ loginPage }) => {
-    await loginPage.login(existingUser.email, 'wrongpass');
-    await loginPage.expectAlertVisibleWithText('Неправильный логин или пароль');
+
+    await loginPage.loginWithValidation(existingUser.email, 'wrongpass', false);
   });
 
   test('Авторизация с пустыми полями', async ({ loginPage }) => {

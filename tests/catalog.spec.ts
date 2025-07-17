@@ -4,7 +4,7 @@ import { test, expect } from '../fixtures/fixtures';
 import { isSortedAsc, isSortedDesc, isSortedByDateDesc, isSortedByDateAsc } from '../utils/sorting';
 
 test.describe('Каталог', () => {
-   
+
     test('Каталог загружается и отображает товары', async ({ catalog }) => {
 
         const cards = catalog.getAllProductCards();
@@ -33,7 +33,6 @@ test.describe('Каталог', () => {
         // Клик по сортировке "По новизне"
         await catalog.clickSortOption('По новизне');
         const dates = await catalog.getCreatedDates();//новое
-        //console.log('Полученные даты:', dates.map(d => d.toISOString()));
         expect(isSortedByDateAsc(dates)).toBeTruthy();
     });
 
@@ -53,26 +52,18 @@ test.describe('Каталог', () => {
     });
 
     test('Сброс фильтрации при открытии карточки товара', async ({ catalog, page }) => {
-
-
         // Применяем сортировку "Сначала дорогие"
         await catalog.clickSortOption('Сначала дорогие');
-
         // Открываем карточку товара
         await catalog.openFirstProductCard();
-
         // Возвращаемся назад
         await page.goBack();
-
         // Ожидаем загрузку каталога
         await catalog.waitForCatalogLoaded();
-
         // Получаем текст текущей активной сортировки
         const currentSortText = await catalog.getActiveSortOptionText();
-
         // Проверяем, что сортировка вернулась к дефолтной ("По новизне")
         expect(currentSortText).toBe('По новизне');
-
         // Дополнительно проверяем, что карточки отображаются
         const count = await catalog.getAllProductCards().count();
         expect(count).toBeGreaterThan(0);
@@ -81,7 +72,7 @@ test.describe('Каталог', () => {
 
     test('Кнопка "Показать ещё" увеличивает количество товаров', async ({ catalog }) => {
 
-       
+
         const initialCount = await catalog.getAllProductCards().count();
         await catalog.clickShowMore();
         // Ждём увеличения количества карточек
@@ -92,7 +83,7 @@ test.describe('Каталог', () => {
             message: 'Ожидание увеличения количества карточек',
         }).toBeGreaterThan(initialCount);
         //const newCount = await catalog.getAllProductCards().count();
-       // expect(newCount).toBeGreaterThan(initialCount);
+        // expect(newCount).toBeGreaterThan(initialCount);
     });
 });
 

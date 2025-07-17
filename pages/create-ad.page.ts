@@ -20,10 +20,7 @@ export class CreateAdPage {
     }
 
     async goto() {
-        console.log('➡️ Переход на /item/add, текущий URL перед переходом:', this.page.url());
         await this.page.goto('http://market.sedtest-tools.ru/');
-        //await expect(this.page).toHaveURL(/\/item\/add$/, { timeout: 30000 });
-
         // Ожидаем кнопку "Подать объявление" и кликаем по ней
         const submitButton = this.page.getByRole('button', { name: 'Подать объявление' });
         await expect(submitButton).toBeVisible();
@@ -76,14 +73,9 @@ export class CreateAdPage {
         // Показать все объявления — нажимаем "Показать ещё", пока она существует
         const showMoreButton = this.page.getByRole('button', { name: 'Показать ещё' });
         while (await showMoreButton.isVisible().catch(() => false)) {
-            //console.log('Клик по кнопке "Показать ещё"');
             await showMoreButton.click();
             await this.page.waitForTimeout(500); // Ждем подгрузку
         }
-
-        // Отладочный вывод названия
-        //console.log(`Ищем объявление с заголовком: "${title}"`);
-
         // Поиск карточки по названию
         const card = this.page.locator('.Card_wrap__ZiHIA').filter({
             has: this.page.locator('.Card_name__kuUUr').filter({ hasText: title })

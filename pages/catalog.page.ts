@@ -66,7 +66,7 @@ export class CatalogPage {
         const priceLocators = this.page.locator('.Card_price__L0K9l');
         const count = await priceLocators.count();
         const prices: number[] = [];
-        
+
         for (let i = 0; i < count; i++) {
             const text = await priceLocators.nth(i).innerText();
             const cleaned = text.replace(/[^\d,.-]/g, '').replace(',', '.');// Удаляем всё, кроме цифр и запятой/точки, заменяем запятую на точку
@@ -84,16 +84,6 @@ export class CatalogPage {
     }
 
     async clickShowMore() {
-        /*const before = await catalog.getAllProductCards().count();
-        await expect(page.locator('button:has-text("Показать ещё")')).toBeVisible();
-        await catalog.clickShowMore();
-        const after = await catalog.getAllProductCards().count();
-        expect(after).toBeGreaterThan(before);*/
-        /*const showMore = this.page.locator('button:has-text("Показать ещё")');
-        if (await showMore.isVisible()) {
-            await showMore.click();
-            await this.waitForCatalogLoaded();
-        }*/
         await this.page.locator('button:has-text("Показать ещё")').click();
     }
 
