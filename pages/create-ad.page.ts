@@ -68,21 +68,34 @@ export class CreateAdPage {
         await expect(this.page).toHaveURL('http://market.sedtest-tools.ru/account', { timeout: 30000 });
 
         // Проверяем, что заголовок "Мои объявления" присутствует
-        await expect(this.page.getByText('Мои объявления', { exact: true })).toBeVisible({ timeout: 30000 });
+        await expect(this.page.getByText('Мои объявления', { exact: true })).toBeVisible({ timeout: 30000 });    
+        //console.log(`Ожидаем карточку с названием: "${title}" и ценой: "${price}"`);
 
-        // Показать все объявления — нажимаем "Показать ещё", пока она существует
-        const showMoreButton = this.page.getByRole('button', { name: 'Показать ещё' });
-        while (await showMoreButton.isVisible().catch(() => false)) {
-            await showMoreButton.click();
-            await this.page.waitForTimeout(500); // Ждем подгрузку
+        // Нажимай "Показать ещё", пока она есть и карточка не найдена
+        for (let i = 0; i < 5; i++) {
+            const card = this.page.locator('.Card_wrap__ZiHIA').filter({
+                has: this.page.locator('.Card_name__kuUUr').filter({ hasText: title })
+            });
+
+            const isVisible = await card.isVisible().catch(() => false);
+            if (isVisible) {
+                //console.log('Карточка найдена, проверяем содержимое...');
+                await expect(card).toBeVisible({ timeout: 10000 });
+                await expect(card.locator('.Card_price__ziptK')).toHaveText(price);
+                return;
+            }
+
+            const showMoreBtn = this.page.locator('button:has-text("Показать ещё")');
+            if (await showMoreBtn.isVisible()) {
+                //console.log('Нажимаем кнопку "Показать ещё"...');
+                await showMoreBtn.click();
+                await this.page.waitForTimeout(1000); // Подождать загрузку
+            } else {
+                //console.log('Кнопка "Показать ещё" больше не отображается');
+                break;
+            }
         }
-        // Поиск карточки по названию
-        const card = this.page.locator('.Card_wrap__ZiHIA').filter({
-            has: this.page.locator('.Card_name__kuUUr').filter({ hasText: title })
-        });
 
-        await card.waitFor({ state: 'visible', timeout: 10000 });
-        await expect(card).toBeVisible();
-        await expect(card.locator('.Card_price__ziptK')).toHaveText(price);
+        throw new Error(`Карточка с названием "${title}" не найдена на странице`);
     }
 }

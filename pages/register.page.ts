@@ -27,6 +27,7 @@ export class RegisterPage {
     const uniqueEmail = `testuser_${Date.now()}@example.com`;
     await this.fillForm(uniqueEmail, 'Test12345', 'Анна', 'Иванова', '89991234567');
     await this.submit();
+    
   }
 
   alert() {

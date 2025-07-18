@@ -12,6 +12,9 @@ test.describe('Регистрация', () => {
     await registerPage.registerNewUser();
     await expect(registerPage.page).toHaveURL(/\/account$/);
     await expect(registerPage.page.locator('.UserAdvertList_right__kg90g .MuiBox-root')).toHaveText('Объявлений нет');
+    const nameLocator = registerPage.page.locator('.MuiBox-root.css-9kubtj');
+    await expect(nameLocator).toBeVisible();
+    await expect(nameLocator).toHaveText('Анна')
   });
 
   test('Регистрация с уже существующим email', async ({ registerPage }) => {

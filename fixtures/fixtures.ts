@@ -34,6 +34,7 @@ export const test = base.extend<Pages>({
     const createAdPage = new CreateAdPage(page);
     await use(createAdPage);
   },
+  
 });
 
 export { expect };

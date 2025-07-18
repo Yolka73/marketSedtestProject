@@ -15,11 +15,12 @@ test.describe('Подача объявления', () => {
 
 
     test.describe('С авторизацией', () => {
-        test.beforeEach(async ({ loginPage }) => {            
+        test.beforeEach(async ({ loginPage }) => {
+            await loginPage.goto();
             await loginPage.login(existingUser.email, existingUser.password);
         });
 
-        test('Клик по кнопке "Подать объявление" ведет на страницу подачи б', async ({ page }) => {
+        test('Клик по кнопке "Подать объявление" ведет на страницу подачи обявления', async ({ page }) => {
             await expect(page.getByRole('button', { name: 'Подать объявление' })).toBeVisible();
             await page.getByRole('button', { name: 'Подать объявление' }).click();
             await expect(page).toHaveURL(/\/item\/add$/);
