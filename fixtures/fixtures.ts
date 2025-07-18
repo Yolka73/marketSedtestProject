@@ -14,10 +14,14 @@ type Pages = {
 
 export const test = base.extend<Pages>({
   loginPage: async ({ page }, use) => {
-    await use(new LoginPage(page));
+    const loginPage = new LoginPage(page);
+    await loginPage.goto(); 
+    await use(loginPage);
   },
   registerPage: async ({ page }, use) => {
-    await use(new RegisterPage(page));
+    const registerPage = new RegisterPage(page);
+    await registerPage.goto();
+    await use(registerPage);
   },
 
   catalog: async ({ page }, use) => {

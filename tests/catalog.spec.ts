@@ -85,17 +85,15 @@ test.describe('Каталог', () => {
             timeout: 5000,
             message: 'Ожидание увеличения количества карточек',
         }).toBeGreaterThan(initialCount);
-     
+
     });
-});
+    test('Клик по категории открывает нужный каталог', async ({ catalog, page }) => {
 
-test('Клик по категории открывает нужный каталог', async ({ catalog, page }) => {
+        await catalog.clickCategory('Техника');
+        await expect(page).toHaveURL('http://market.sedtest-tools.ru/category/1');
 
-    await catalog.clickCategory('Техника');
-    await expect(page).toHaveURL('http://market.sedtest-tools.ru/category/1');
-
-    const categoryTitleLocator = await catalog.currentCategoryTitle();
-    await expect(categoryTitleLocator).toContainText('Техника'); // <-- Исправлено
-});
-
+        const categoryTitleLocator = await catalog.currentCategoryTitle();
+        await expect(categoryTitleLocator).toContainText('Техника'); // <-- Исправлено
+    });
+ });
 
