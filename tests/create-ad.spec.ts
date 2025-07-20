@@ -15,21 +15,17 @@ test.describe('Подача объявления', () => {
 
 
     test.describe('С авторизацией', () => {
-        test.beforeEach(async ({ loginPage }) => {
-            await loginPage.goto();
-            await loginPage.login(existingUser.email, existingUser.password);
-        });
-
-        test('Клик по кнопке "Подать объявление" ведет на страницу подачи обявления', async ({ page }) => {
-            await expect(page.getByRole('button', { name: 'Подать объявление' })).toBeVisible();
-            await page.getByRole('button', { name: 'Подать объявление' }).click();
-            await expect(page).toHaveURL(/\/item\/add$/);
-            await expect(page.locator('#root')).toContainText('Подача объявления');
+        
+        test('Клик по кнопке "Подать объявление" ведет на страницу подачи обявления', async ({ authorizedPage }) => {
+            await expect(authorizedPage.getByRole('button', { name: 'Подать объявление' })).toBeVisible();
+            await authorizedPage.getByRole('button', { name: 'Подать объявление' }).click();
+            await expect(authorizedPage).toHaveURL(/\/item\/add$/);
+            await expect(authorizedPage.locator('#root')).toContainText('Подача объявления');
         });
 
         test.describe('Негативные кейсы', () => {
             for (const { title, description, price, expectedError, desc } of invalidAdCases) {
-                test(`Ошибка при ${desc}`, async ({ createAdPage }) => {
+                test(`Ошибка при ${desc}`, async ({authorizedPage, createAdPage }) => {
                     await createAdPage.goto();
                     await createAdPage.fillForm(title, description, price);
                     await createAdPage.submit();
@@ -37,7 +33,7 @@ test.describe('Подача объявления', () => {
                 });
             }
 
-            test('Кнопка "Добавить фотографии" становится неактивной при загрузке более 9 изображений', async ({ createAdPage }) => {
+            test('Кнопка "Добавить фотографии" становится неактивной при загрузке более 9 изображений', async ({authorizedPage, createAdPage }) => {
                 await createAdPage.goto();
                 const files = Array(10).fill('tests/assets/sample.jpg');
                 await createAdPage.uploadImages(files);
@@ -46,7 +42,7 @@ test.describe('Подача объявления', () => {
             });
         });
 
-        test('Успешная подача объявления с ценой 0 = "Договорная"', async ({ createAdPage }) => {
+        test('Успешная подача объявления с ценой 0 = "Договорная"', async ({authorizedPage, createAdPage }) => {
             const uniqueTitle = `Тестовый товар ${Date.now()}`;
             await createAd(createAdPage, {
                 title: uniqueTitle,
@@ -57,7 +53,7 @@ test.describe('Подача объявления', () => {
             await createAdPage.expectAdCreated(uniqueTitle, 'Договорная');
         });
 
-        test('Успешная подача объявления с названием из спецсимволов', async ({ createAdPage }) => {
+        test('Успешная подача объявления с названием из спецсимволов', async ({authorizedPage, createAdPage }) => {
             const specialTitle = `~@#$%^&*()_+|-=\\{}[]:”;’<>?,./®©£¥¢¦§«»€ ${Date.now()}`;
             await createAd(createAdPage, {
                 title: specialTitle,
